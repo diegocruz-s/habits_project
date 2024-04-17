@@ -1,12 +1,18 @@
-import { User, UserModel } from "../../src/entities/user/User"
 import { faker } from '@faker-js/faker'
 
-export const CreateUserValid = (): User => {
-    const datasUser: UserModel = {
-        id: faker.string.uuid(),
+import { IDatasNewUser, User } from "../../src/entities/user/User"
+
+interface PossibleDatas {
+    id?: string
+    email?: string
+    password?: string
+}
+export const CreateUserValid = ({ id, email, password }: PossibleDatas): User => {
+    const datasUser: IDatasNewUser = {
+        id: id || faker.string.uuid(),
         name: faker.internet.userName(),
-        email: faker.internet.email(),
-        password: faker.internet.password()
+        email: email || faker.internet.email(),
+        password: password || faker.internet.password()
     }
 
     const user: User = new User(

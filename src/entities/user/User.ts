@@ -3,15 +3,14 @@ export interface IReturnIsUserValid {
     valid: boolean
 }
 
-export interface UserModel {
-    id: string,
-    name: string,
-    email: string,
-    password: string,
-    isActive?: boolean
+export interface IDatasNewUser {
+    id: string
+    name: string
+    email: string
+    password: string
 }
 
-export class User {
+export class User { 
     isActive: boolean
 
     constructor(

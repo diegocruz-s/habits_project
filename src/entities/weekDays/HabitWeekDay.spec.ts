@@ -25,7 +25,6 @@ describe('HabitWeekDay', () => {
             
             const habitWeekDay = new HabitWeekDay(id, habit.id, weekDay)
     
-            console.log('habitWeekDay: ', habitWeekDay)
         } catch (error) {
             expect(error).toBeTruthy()
         }

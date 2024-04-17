@@ -1,11 +1,11 @@
 import { randomUUID } from "crypto"
-import { Habit } from "./Habit"
 
-import { HabitWeekDay } from '../weekDays/HabitWeekDay'
+import { CreateHabitWithBeforeYesterday } from "../../../tests/factories/Habit"
 import { CreateUserValid } from "../../../tests/factories/User"
 import { Day } from "../day/Day"
-import { CreateHabitWithBeforeYesterday } from "../../../tests/factories/Habit"
 import { DayHabitConclude } from "../dayHabitsConcludes/DayHabitConclude"
+import { HabitWeekDay } from '../weekDays/HabitWeekDay'
+import { Habit } from "./Habit"
 
 describe('Habit', () => {
     it('should create a habit', () => {
@@ -25,7 +25,7 @@ describe('Habit', () => {
     })
 
     it('should create a habit with user is valid', () => {
-        const user = CreateUserValid()
+        const user = CreateUserValid({})
 
         const id = randomUUID()
         const title = 'any_title'
@@ -40,7 +40,7 @@ describe('Habit', () => {
     })
 
     it('should create a habit for days of week', () => {
-        const user = CreateUserValid()
+        const user = CreateUserValid({})
         const id = randomUUID()
         const title = 'any_title'
         const createdAt = new Date()
@@ -71,19 +71,15 @@ describe('Habit', () => {
         habit.setWeekDays(new HabitWeekDay(randomUUID(), habit.id, today.date.getDay()))
 
         const daysHabitsConcludes = [
-            new DayHabitConclude(randomUUID(), yesterday, habit.id),
-            new DayHabitConclude(randomUUID(), today, habit.id)
+            new DayHabitConclude(randomUUID(), yesterday, habit),
+            new DayHabitConclude(randomUUID(), today, habit)
         ]
-
-        for (const dayHabitConclude of daysHabitsConcludes) {
-            habit.setDayHabitsConcludes(dayHabitConclude)
-        }
 
         expect(habit.dayHabitsConcludes.length).toBe(2)
         expect(habit.dayHabitsConcludes[0].day).toBe(yesterday)
-        expect(habit.dayHabitsConcludes[0].habitId).toBe(habit.id)
+        expect(habit.dayHabitsConcludes[0].habit.id).toBe(habit.id)
         expect(habit.dayHabitsConcludes[1].day).toBe(today)
-        expect(habit.dayHabitsConcludes[1].habitId).toBe(habit.id)
+        expect(habit.dayHabitsConcludes[1].habit.id).toBe(habit.id)
     })
 
     it('should return an error when trying to complete a habit on a day that is not contained in the weekDay', () => {
@@ -95,9 +91,9 @@ describe('Habit', () => {
 
         habit.setWeekDays(new HabitWeekDay(randomUUID(), habit.id, yesterday.date.getDay()))
 
-        const daysHabitsConcludes = new DayHabitConclude(randomUUID(), beforeYesterday, habit.id)
+        const daysHabitsConcludes = new DayHabitConclude(randomUUID(), beforeYesterday, habit)
 
-        expect(habit.setDayHabitsConcludes(daysHabitsConcludes)).toHaveProperty('error')
+        expect(daysHabitsConcludes.error).not.toBeNull()
         
     })
 
@@ -109,10 +105,10 @@ describe('Habit', () => {
 
         habit.setWeekDays(new HabitWeekDay(randomUUID(), habit.id, createdAt.getDay()))
 
-        const daysHabitsConcludes = new DayHabitConclude(randomUUID(), today, habit.id)
+        const daysHabitsConcludes = new DayHabitConclude(randomUUID(), today, habit)
 
         expect(createdAt.getDay()).toBe(today.date.getDay())
-        expect(habit.setDayHabitsConcludes(daysHabitsConcludes)).toHaveProperty('error')
+        expect(daysHabitsConcludes.error).not.toBeNull()
         
     })
 })

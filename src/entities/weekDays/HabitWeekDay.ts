@@ -14,7 +14,7 @@ export class HabitWeekDay {
 
     isValid (weekDay: number) {
         if ((weekDay < 0) || (weekDay > 6)) {
-            return { error: 'Week day nonexistent' }
+            return { error: 'Week day nonexistent!' }
         }
         return { success: true }
     }

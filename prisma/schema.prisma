@@ -1,0 +1,64 @@
+// This is your Prisma schema file
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  isActive Boolean
+
+  habits Habit[]
+}
+
+model Habit {
+  id String @id @default(uuid())
+  title String
+  createdAt DateTime
+  numbersOfWeek Int
+  isActive Boolean @default(true)
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  weekDays WeekDay[]
+  dayHabitComplete DayHabitComplete[]
+}
+
+model WeekDay {
+  id String @id @default(uuid())
+  weekDay Int
+
+  habitId String
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, weekDay], name: "unique_habit_weekDay")
+}
+
+model Day {
+  id String @id @default(uuid())
+  date DateTime
+
+  dayComplete DayHabitComplete[]
+}
+
+model DayHabitComplete {
+  id String @id @default(uuid())
+  dayId String
+  habitId String
+
+  day Day @relation(fields: [dayId], references: [id])
+  habit Habit @relation(fields: [habitId], references: [id])
+
+  @@unique([dayId, habitId])
+}

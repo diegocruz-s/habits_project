@@ -1,6 +1,5 @@
 import { randomUUID } from "crypto"
 import { User } from "./User"
-import { CreateUserValid } from "../../../tests/factories/User"
 
 describe('User', () => {
     it('should create a user valid', () => {
@@ -38,7 +37,7 @@ describe('User', () => {
         expect(errors[0]).toContain('email')
     })
 
-    it('should return errors with email is not provided', () => {
+    it('should return errors with parameters is not provided', () => {
         const { id, name, email, password } = {
             id: '',
             name: '',

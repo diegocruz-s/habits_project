@@ -20,9 +20,7 @@ describe('Day', () => {
 
         const day = new Day(randomUUID(), date)
 
-        const dayHabitConclude = new DayHabitConclude(randomUUID(), day, habit.id)
-        habit.setDayHabitsConcludes(dayHabitConclude)
-        day.setDayHabitConclude(dayHabitConclude)
+        const dayHabitConclude = new DayHabitConclude(randomUUID(), day, habit)
 
         expect(day.date).toBe(date)
         expect(day.dayHabitConclude[0]).toBe(dayHabitConclude)
